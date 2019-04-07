@@ -133,7 +133,7 @@ namespace CargoHoldFix
             cb = (UICheckBox)group.AddCheckbox("Ships", disableDummyShip.value, (b) => { disableDummyShip.value = b; });
             group.AddSpace(2);
             label = panel.AddUIComponent<UILabel>();
-            label.text = "Note: If you are using any other mod that affects dummy traffic, leave these unchecked and \nuse the other mod's options.";
+            label.text = "Compatibility Note: If you are using any other mod that affects dummy traffic, leave these \nunchecked and use the other mod's options.";
             label.textScale = 0.88f;
             group.AddSpace(10);
         }
