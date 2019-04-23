@@ -1,12 +1,9 @@
 ﻿using ColossalFramework;
-using ColossalFramework.IO;
 using ColossalFramework.UI;
 using Harmony;
 using ICities;
 using System;
-using System.IO;
 using System.Reflection;
-using System.Xml.Serialization;
 using UnityEngine;
 
 namespace CargoHoldFix
@@ -21,10 +18,7 @@ namespace CargoHoldFix
         private static HarmonyInstance harmonyInstance;
         private static readonly object padlock = new object();
 
-        public static bool Enabled = true;
-
         private static UISlider m_sliderTrain, m_sliderPlane, m_sliderShip;
-        //private static UICheckBox m_cbRoads, m_cbTrain, m_cbPlane, m_cbShip;
 
         public static SavedInt delayTrain = new SavedInt("delayTrain", settingsFileName, 5, true);
         public static SavedInt delayPlane = new SavedInt("delayPlane", settingsFileName, 5, true);
@@ -51,7 +45,6 @@ namespace CargoHoldFix
 
         public override void OnLevelLoaded(LoadMode loadMode)
         {
-            Enabled = true;
             HarmonyInstance harmony = GetHarmonyInstance();
             harmony.PatchAll(Assembly.GetExecutingAssembly());
 
@@ -88,7 +81,6 @@ namespace CargoHoldFix
 
         public override void OnLevelUnloading()
         {
-            Enabled = false;
             base.OnLevelUnloading();
         }
 
@@ -104,7 +96,6 @@ namespace CargoHoldFix
                 return harmonyInstance;
             }
         }
-
 
         public void OnSettingsUI(UIHelperBase helper)
         {
@@ -134,7 +125,8 @@ namespace CargoHoldFix
             group.AddSpace(2);
             label = panel.AddUIComponent<UILabel>();
             label.text = "Compatibility Note: If you are using any other mod that affects dummy traffic, leave these \nunchecked and use the other mod's options.";
-            label.textScale = 0.88f;
+            label.textScale = 0.85f;
+            label.textColor = new Color32(255, 255, 255, 100);
             group.AddSpace(10);
         }
 
