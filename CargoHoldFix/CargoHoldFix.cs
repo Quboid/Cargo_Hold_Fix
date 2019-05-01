@@ -11,7 +11,7 @@ namespace CargoHoldFix
     public class CargoHoldFix : LoadingExtensionBase, IUserMod
     {
         public string Name => "Cargo Hold Fix";
-        public string Description => "Cargo trains/ships/aircraft wait until they are more fully loaded";
+        public string Description => "Cargo trains/ships/aircraft use more cargo space";
         public const string settingsFileName = "CargoHoldFix";
 
         private static readonly string harmonyId = "quboid.csl_mods.cargo_hold_fix";
@@ -45,6 +45,11 @@ namespace CargoHoldFix
 
         public override void OnLevelLoaded(LoadMode loadMode)
         {
+            if (!(loadMode == LoadMode.LoadGame || loadMode == LoadMode.NewGame || loadMode == LoadMode.LoadScenario || loadMode == LoadMode.NewGameFromScenario || loadMode == LoadMode.NewScenarioFromGame || loadMode == LoadMode.NewScenarioFromMap))
+            {
+                return;
+            }
+
             HarmonyInstance harmony = GetHarmonyInstance();
             harmony.PatchAll(Assembly.GetExecutingAssembly());
 
@@ -66,12 +71,12 @@ namespace CargoHoldFix
                     connections[i].m_dummyTrafficFactor = 0;
                     continue;
                 }
-                else if (disableDummyRoads && connections[i].name == "Road Connection")
+                else if (disableDummyRoads && connections[i].name == "Road Connection Small")
                 {
                     connections[i].m_dummyTrafficFactor = 0;
                     continue;
                 }
-                else if (disableDummyRoads && connections[i].name == "Road Connection Small")
+                else if (disableDummyRoads && connections[i].name == "Road Connection")
                 {
                     connections[i].m_dummyTrafficFactor = 0;
                     continue;

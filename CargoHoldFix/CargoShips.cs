@@ -18,9 +18,14 @@ namespace CargoHoldFix
             while (!(codes[lineNo].opcode == OpCodes.Ldc_I4_2))
             {
                 lineNo++;
+                if (lineNo >= (codes.Count - 3))
+                {
+                    Debug.Log($"CSAI Code not found - already patched?");
+                    return codes;
+                }
             }
 
-            Debug.Log($"Line number: {lineNo}");
+            //Debug.Log($"Line number: {lineNo}");
 
             codes[lineNo].opcode = OpCodes.Ldc_I4;
             codes[lineNo].operand = CargoHoldFix.delayTrain.value * 2;
@@ -31,22 +36,22 @@ namespace CargoHoldFix
     }
 
 
-    [HarmonyPatch(typeof(PassengerShipAI))]
-    [HarmonyPatch("CanLeave")]
-    public class PSAI_CanLeave
-    {
-        public static bool Postfix(bool __result, ushort vehicleID, ref Vehicle vehicleData)
-        {
-            if (__result)
-            {
-                Random.InitState(System.DateTime.Now.Second);
-                if (Random.Range(0, 80) == 0)
-                {
-                    return true;
-                }
-                Debug.Log($"Ship #{vehicleID}:{__result} - wait:{vehicleData.m_waitCounter}, tType:{vehicleData.m_transferType}, tSize:{vehicleData.m_transferSize}, tLine:{vehicleData.m_transportLine}");
-            }
-            return false;
-        }
-    }
+    //[HarmonyPatch(typeof(PassengerShipAI))]
+    //[HarmonyPatch("CanLeave")]
+    //public class PSAI_CanLeave
+    //{
+    //    public static bool Postfix(bool __result, ushort vehicleID, ref Vehicle vehicleData)
+    //    {
+    //        if (__result)
+    //        {
+    //            Random.InitState(System.DateTime.Now.Second);
+    //            if (Random.Range(0, 80) == 0)
+    //            {
+    //                return true;
+    //            }
+    //            //Debug.Log($"Ship #{vehicleID}:{__result} - wait:{vehicleData.m_waitCounter}, tType:{vehicleData.m_transferType}, tSize:{vehicleData.m_transferSize}, tLine:{vehicleData.m_transportLine}");
+    //        }
+    //        return false;
+    //    }
+    //}
 }

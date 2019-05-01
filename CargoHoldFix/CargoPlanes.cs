@@ -19,6 +19,11 @@ namespace CargoHoldFix
             while (!(codes[lineNo].opcode == OpCodes.Ldc_I4_2))
             {
                 lineNo++;
+                if (lineNo >= (codes.Count - 3))
+                {
+                    Debug.Log($"CPAI Code not found - already patched?");
+                    return codes;
+                }
             }
 
             codes[lineNo].opcode = OpCodes.Ldc_I4;
