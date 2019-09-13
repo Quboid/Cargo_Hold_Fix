@@ -10,16 +10,17 @@ namespace CargoHoldFix
 {
     public class CargoHoldFix : LoadingExtensionBase, IUserMod
     {
-        public string Name => "Cargo Hold Fix";
-        public string Description => "Cargo trains/ships/aircraft use more cargo space";
+        public string Name => "Cargo Hold & Passengers Fix";
+        public string Description => "Trains/ships/aircraft use more cargo/passenger space";
         public const string settingsFileName = "CargoHoldFix";
 
         private static readonly string harmonyId = "quboid.csl_mods.cargo_hold_fix";
         private static HarmonyInstance harmonyInstance;
         private static readonly object padlock = new object();
 
-        private static UISlider m_sliderTrain, m_sliderPlane, m_sliderShip;
+        private static UISlider m_sliderPassengers, m_sliderTrain, m_sliderPlane, m_sliderShip;
 
+        public static SavedInt delayPassengers = new SavedInt("delayTrain", settingsFileName, 5, true);
         public static SavedInt delayTrain = new SavedInt("delayTrain", settingsFileName, 5, true);
         public static SavedInt delayPlane = new SavedInt("delayPlane", settingsFileName, 5, true);
         public static SavedInt delayShip = new SavedInt("delayShip", settingsFileName, 5, true);
@@ -51,6 +52,7 @@ namespace CargoHoldFix
             }
 
             HarmonyInstance harmony = GetHarmonyInstance();
+            HarmonyInstance.DEBUG = false;
             harmony.PatchAll(Assembly.GetExecutingAssembly());
 
             OutsideConnectionAI[] connections = Resources.FindObjectsOfTypeAll<OutsideConnectionAI>();
@@ -110,12 +112,14 @@ namespace CargoHoldFix
             group = helper.AddGroup("Delay Spawning");
             UIPanel panel = ((UIPanel)((UIHelper)group).self) as UIPanel;
             UILabel label = panel.AddUIComponent<UILabel>();
-            label.text = "How long to delay vehicles to wait for cargo before spawning, compared to the default \ndelay. Takes effect after a game restart. Recommended: 3x";
-            m_sliderTrain = (UISlider)group.AddSlider($"Trains:", 1f, 10f, 1f, delayTrain.value, ChangeSliderTrain);
+            label.text = "How long to delay vehicles to wait for cargo before spawning, compared to the default \ndelay. Takes effect after a game restart. Recommended: 5x";
+            m_sliderPassengers = (UISlider)group.AddSlider($"All Large Passenger Vehicles:", 1f, 10f, 1f, delayPassengers.value, ChangeSliderPassengers);
+            m_sliderPassengers.tooltip = delayTrain.value.ToString() + "x";
+            m_sliderTrain = (UISlider)group.AddSlider($"Cargo Trains:", 1f, 10f, 1f, delayTrain.value, ChangeSliderTrain);
             m_sliderTrain.tooltip = delayTrain.value.ToString() + "x";
-            m_sliderPlane = (UISlider)group.AddSlider($"Planes:", 1f, 10f, 1f, delayPlane.value, ChangeSliderPlane);
+            m_sliderPlane = (UISlider)group.AddSlider($"Cargo Planes:", 1f, 10f, 1f, delayPlane.value, ChangeSliderPlane);
             m_sliderPlane.tooltip = delayPlane.value.ToString() + "x";
-            m_sliderShip = (UISlider)group.AddSlider($"Ships:", 1f, 10f, 1f, delayShip.value, ChangeSliderShip);
+            m_sliderShip = (UISlider)group.AddSlider($"Cargo Ships:", 1f, 10f, 1f, delayShip.value, ChangeSliderShip);
             m_sliderShip.tooltip = delayShip.value.ToString() + "x";
             group.AddSpace(10);
 
@@ -133,6 +137,13 @@ namespace CargoHoldFix
             label.textScale = 0.85f;
             label.textColor = new Color32(255, 255, 255, 100);
             group.AddSpace(10);
+        }
+
+        private static void ChangeSliderPassengers(float v)
+        {
+            delayPassengers.value = Convert.ToInt32(v);
+            m_sliderPassengers.tooltip = v.ToString() + "x";
+            m_sliderPassengers.RefreshTooltip();
         }
 
         private static void ChangeSliderTrain(float v)
