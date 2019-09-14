@@ -10,31 +10,31 @@ using UnityEngine;
 
 namespace CargoHoldFix
 {
-    [HarmonyPatch(typeof(CargoHoldFix_CitizenHandler.CitizenHandlerClass))]
-    [HarmonyPatch("CitizenHandler")]
-    public class CitizenHandlerILCode
-    {
-        public static List<CodeInstruction> ILCode = null;
+    //[HarmonyPatch(typeof(CargoHoldFix_CitizenHandler.CitizenHandlerClass))]
+    //[HarmonyPatch("CitizenHandler")]
+    //public class CitizenHandlerILCode
+    //{
+    //    public static List<CodeInstruction> ILCode = null;
 
-        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-        {
-            ILCode = (List<CodeInstruction>)instructions;
-            //return instructions;
+    //    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    //    {
+    //        ILCode = (List<CodeInstruction>)instructions;
+    //        //return instructions;
 
-            var codes = new List<CodeInstruction>(instructions);
-            CodeInstruction ci;
+    //        var codes = new List<CodeInstruction>(instructions);
+    //        CodeInstruction ci;
 
-            string msg = $"TESTILCODE\nLines: {codes.Count}\n";
-            for (int i = 0; i < codes.Count; i++)
-            {
-                ci = codes[i];
-                msg += $"{i}: {ci.opcode}, {ci.operand ?? "null"} <{(ci.operand == null ? "null" : ci.operand.GetType().ToString())}>\n";
-            }
-            Debug.Log($"{msg}");
+    //        string msg = $"TESTILCODE\nLines: {codes.Count}\n";
+    //        for (int i = 0; i < codes.Count; i++)
+    //        {
+    //            ci = codes[i];
+    //            msg += $"{i}: {ci.opcode}, {ci.operand ?? "null"} <{(ci.operand == null ? "null" : ci.operand.GetType().ToString())}>\n";
+    //        }
+    //        Debug.Log($"{msg}");
 
-            return codes;
-        }
-    }
+    //        return codes;
+    //    }
+    //}
 
     [HarmonyPatch(typeof(HumanAI))]
     [HarmonyPatch("SimulationStep")]
@@ -48,18 +48,19 @@ namespace CargoHoldFix
             CodeInstruction ci;
 
             string msg = $"ILCODE HumanAI (before)\nLines: {codes.Count}\n";
-            for (int i = 320; i < 360; i++)
-            //for (int i = 0; i < codes.Count; i++)
-            {
-                ci = codes[i];
-                msg += $"{i}: {ci.opcode}, {ci.operand ?? "null"} <{(ci.operand == null ? "null" : ci.operand.GetType().ToString())}>\n";
-            }
-            Debug.Log($"{msg}");
+            //for (int i = 320; i < 360; i++)
+            ////for (int i = 0; i < codes.Count; i++)
+            //{
+            //    ci = codes[i];
+            //    msg += $"{i}: {ci.opcode}, {ci.operand ?? "null"} <{(ci.operand == null ? "null" : ci.operand.GetType().ToString())}>\n";
+            //}
+            //Debug.Log($"{msg}");
 
             newCodes.Add(codes[0]);
             newCodes.Add(codes[1]);
             newCodes.Add(codes[2]);
             int lineNo = 3;
+
             while (!(codes[lineNo - 2].opcode == OpCodes.Call && codes[lineNo - 1].opcode == OpCodes.Ldflda && codes[lineNo].opcode == OpCodes.Ldc_I4_2))
             {
                 newCodes.Add(codes[lineNo++]);
@@ -69,49 +70,35 @@ namespace CargoHoldFix
                     return codes;
                 }
             }
-            Debug.Log($"LINE FOUND - {lineNo}: {codes[lineNo].opcode} {codes[lineNo].operand}");
-            //Debug.Log($"{typeof(HAI_SimulationStep).Assembly.GetType("CargoHoldFix.HAI_SimulationStep")}");
-            //Debug.Log($"{typeof(HAI_SimulationStep).Assembly.GetType("CargoHoldFix.HAI_SimulationStep").GetMethod("IsWaitingAtOutsideConnection")}");
+            Debug.Log($"PASSENGERS LINE FOUND - {lineNo}: {codes[lineNo].opcode} {codes[lineNo].operand}");
 
-            //newCodes.Add(new CodeInstruction(OpCodes.Stloc_0));
-            //newCodes.Add(new CodeInstruction(OpCodes.Ldc_I4_2));
-            //newCodes.Add(new CodeInstruction(OpCodes.Stloc_1));
-            //newCodes.Add(new CodeInstruction(OpCodes.Ldloca_S, typeof(CitizenInstance)));
-            //newCodes.Add(new CodeInstruction(OpCodes.Call, typeof(HAI_SimulationStep).Assembly.GetType("CargoHoldFix.HAI_SimulationStep").GetMethod("IsWaitingAtOutsideConnection")));
-            //newCodes.Add(new CodeInstruction(OpCodes.Brfalse));
+            //if (CitizenHandlerILCode.ILCode == null)
+            //{
+            //    throw new NullReferenceException($"CitizenHandlerILCode.ILCode is Null");
+            //}
 
-            //newCodes.Add(new CodeInstruction(OpCodes.Ldc_I4_S, 10));
-            //newCodes.Add(new CodeInstruction(OpCodes.Stloc_1));
-            //newCodes.Add(codes[lineNo]);
-            //newCodes.Add(codes[lineNo + 1]);
-            //newCodes.Add(new CodeInstruction(OpCodes.Ldloc_1));
-            //newCodes.Add(codes[lineNo + 3]);
+            //for (int i = 0; i <= 1; i++)
+            //{
+            //    newCodes.Add(CitizenHandlerILCode.ILCode[i]);
+            //}
+            newCodes.Add(new CodeInstruction(OpCodes.Ldarg_2));
+            newCodes.Add(new CodeInstruction(OpCodes.Call, typeof(HAI_SimulationStep).GetMethod("GetWaitFactor")));
 
-            if (CitizenHandlerILCode.ILCode == null)
-            {
-                throw new NullReferenceException($"CitizenHandlerILCode.ILCode is Null");
-            }
-
-            for (int i = 0; i <= 1; i++)
-            {
-                newCodes.Add(CitizenHandlerILCode.ILCode[i]);
-            }
-
-            msg = $"ILCODE HumanAI (during)\nLines: {newCodes.Count}\n";
-            for (int i = 320; i < newCodes.Count; i++)
-            {
-                ci = newCodes[i];
-                msg += $"{i}: {ci.opcode}, {ci.operand ?? "null"} <{(ci.operand == null ? "null" : ci.operand.GetType().ToString())}>\n";
-            }
-            Debug.Log($"{msg}");
+            //msg = $"ILCODE HumanAI (during)\nLines: {newCodes.Count}\n";
+            //for (int i = 320; i < newCodes.Count; i++)
+            //{
+            //    ci = newCodes[i];
+            //    msg += $"{i}: {ci.opcode}, {ci.operand ?? "null"} <{(ci.operand == null ? "null" : ci.operand.GetType().ToString())}>\n";
+            //}
+            //Debug.Log($"{msg}");
 
             for (int i = lineNo + 1; i < codes.Count; i++)
             {
                 newCodes.Add(codes[i]);
             }
 
-            msg = $"ILCODE HumanAI (after)\nLines: {newCodes.Count}\n";
-            for (int i = 320; i < 360; i++)
+            msg = $"ILCODE HumanAI (after patching)\nLines: {newCodes.Count}\n";
+            for (int i = 330; i < 350; i++)
             //for (int i = 0; i < codes.Count; i++)
             {
                 ci = newCodes[i];
@@ -124,18 +111,10 @@ namespace CargoHoldFix
 
         public static uint GetWaitFactor(ref CitizenInstance citizenData)
         {
-            List<int> tagged = new List<int>
-            {
-                102800,
-                102798,
-                102796,
-                104186
-            };
             if (IsWaitingAtOutsideConnection(ref citizenData))
             {
-                if (tagged.Contains(citizenData.Info.GetInstanceID()))
-                    Debug.Log($"{citizenData.Info.GetInstanceID()} {citizenData.m_waitCounter}");
-                return 5u;// 10u;
+                //Debug.Log($"{citizenData.m_citizen} {citizenData.m_waitCounter}");
+                return (uint)CargoHoldFix.delayPassengers.value * 2;
             }
             return 2u;
         }

@@ -113,13 +113,17 @@ namespace CargoHoldFix
             UIPanel panel = ((UIPanel)((UIHelper)group).self) as UIPanel;
             UILabel label = panel.AddUIComponent<UILabel>();
             label.text = "How long to delay vehicles to wait for cargo before spawning, compared to the default \ndelay. Takes effect after a game restart. Recommended: 5x";
-            m_sliderPassengers = (UISlider)group.AddSlider($"All Large Passenger Vehicles:", 1f, 10f, 1f, delayPassengers.value, ChangeSliderPassengers);
+            m_sliderPassengers = (UISlider)group.AddSlider($"Big Passenger Vehicles:", 1f, 10f, 1f, delayPassengers.value, ChangeSliderPassengers);
+            m_sliderPassengers.width = 400f;
             m_sliderPassengers.tooltip = delayTrain.value.ToString() + "x";
             m_sliderTrain = (UISlider)group.AddSlider($"Cargo Trains:", 1f, 10f, 1f, delayTrain.value, ChangeSliderTrain);
+            m_sliderTrain.width = 400f;
             m_sliderTrain.tooltip = delayTrain.value.ToString() + "x";
             m_sliderPlane = (UISlider)group.AddSlider($"Cargo Planes:", 1f, 10f, 1f, delayPlane.value, ChangeSliderPlane);
+            m_sliderPlane.width = 400f;
             m_sliderPlane.tooltip = delayPlane.value.ToString() + "x";
             m_sliderShip = (UISlider)group.AddSlider($"Cargo Ships:", 1f, 10f, 1f, delayShip.value, ChangeSliderShip);
+            m_sliderShip.width = 400f;
             m_sliderShip.tooltip = delayShip.value.ToString() + "x";
             group.AddSpace(10);
 
