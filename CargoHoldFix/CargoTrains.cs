@@ -37,7 +37,7 @@ namespace CargoHoldFix
             }
 
             codes[lineNo].opcode = OpCodes.Ldc_I4;
-            codes[lineNo].operand = OptimisedOutsideConnections.delayTrain.value * 2;
+            codes[lineNo].operand = CargoHoldFix.delayTrain.value * 2;
             codes[lineNo + 3].opcode = OpCodes.Cgt;
 
             //msg = $"ILCODE TRAINS (after)\nLines: {codes.Count}\n";

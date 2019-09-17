@@ -8,10 +8,10 @@ using UnityEngine;
 
 namespace CargoHoldFix
 {
-    public class OptimisedOutsideConnections : LoadingExtensionBase, IUserMod
+    public class CargoHoldFix : LoadingExtensionBase, IUserMod
     {
         public string Name => "Optimised Outside Connections";
-        public string Description => "Large vehicles spawn less frequently with more cargo/passengers at a time. (Formerly called Cargo Hold Fix)";
+        public string Description => "Large vehicles spawn less frequently with more cargo/passengers at a time. (Formerly called Cargo Hold Fix.)";
         public const string settingsFileName = "OptimisedOutsideConnections";
 
         private static readonly string harmonyId = "quboid.csl_mods.cargo_hold_fix";
@@ -29,7 +29,7 @@ namespace CargoHoldFix
         public static SavedBool disableDummyPlane = new SavedBool("disableDummyPlane", settingsFileName, false, true);
         public static SavedBool disableDummyShip = new SavedBool("disableDummyShip", settingsFileName, false, true);
 
-        public OptimisedOutsideConnections()
+        public CargoHoldFix()
         {
             try
             {

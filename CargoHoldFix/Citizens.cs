@@ -72,7 +72,7 @@ namespace CargoHoldFix
         {
             if (IsWaitingAtOutsideConnection(ref citizenData))
             {
-                return (uint)OptimisedOutsideConnections.delayPassengers.value * 2u;
+                return (uint)CargoHoldFix.delayPassengers.value * 2u;
             }
             return 2u;
         }

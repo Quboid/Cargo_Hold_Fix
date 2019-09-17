@@ -27,7 +27,7 @@ namespace CargoHoldFix
             }
 
             codes[lineNo].opcode = OpCodes.Ldc_I4;
-            codes[lineNo].operand = OptimisedOutsideConnections.delayPlane.value * 4;
+            codes[lineNo].operand = CargoHoldFix.delayPlane.value * 4;
             codes[lineNo + 3].opcode = OpCodes.Cgt;
 
             return codes;
