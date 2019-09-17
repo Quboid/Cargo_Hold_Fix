@@ -58,7 +58,6 @@
     <Compile Include="CargoShips.cs" />
     <Compile Include="CargoTrains.cs" />
     <Compile Include="CargoHoldFix.cs" />
-    <Compile Include="CitizenHandler.cs" />
     <Compile Include="Citizens.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

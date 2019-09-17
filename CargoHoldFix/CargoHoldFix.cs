@@ -8,11 +8,11 @@ using UnityEngine;
 
 namespace CargoHoldFix
 {
-    public class CargoHoldFix : LoadingExtensionBase, IUserMod
+    public class OptimisedOutsideConnections : LoadingExtensionBase, IUserMod
     {
-        public string Name => "Cargo Hold & Passengers Fix";
-        public string Description => "Trains/ships/aircraft use more cargo/passenger space";
-        public const string settingsFileName = "CargoHoldFix";
+        public string Name => "Optimised Outside Connections";
+        public string Description => "Large vehicles spawn less frequently with more cargo/passengers at a time. (Formerly called Cargo Hold Fix)";
+        public const string settingsFileName = "OptimisedOutsideConnections";
 
         private static readonly string harmonyId = "quboid.csl_mods.cargo_hold_fix";
         private static HarmonyInstance harmonyInstance;
@@ -20,16 +20,16 @@ namespace CargoHoldFix
 
         private static UISlider m_sliderPassengers, m_sliderTrain, m_sliderPlane, m_sliderShip;
 
-        public static SavedInt delayPassengers = new SavedInt("delayTrain", settingsFileName, 5, true);
-        public static SavedInt delayTrain = new SavedInt("delayTrain", settingsFileName, 5, true);
-        public static SavedInt delayPlane = new SavedInt("delayPlane", settingsFileName, 5, true);
-        public static SavedInt delayShip = new SavedInt("delayShip", settingsFileName, 5, true);
+        public static SavedInt delayPassengers = new SavedInt("delayTrain", settingsFileName, 3, true);
+        public static SavedInt delayTrain = new SavedInt("delayTrain", settingsFileName, 3, true);
+        public static SavedInt delayPlane = new SavedInt("delayPlane", settingsFileName, 3, true);
+        public static SavedInt delayShip = new SavedInt("delayShip", settingsFileName, 3, true);
         public static SavedBool disableDummyRoads = new SavedBool("disableDummyRoads", settingsFileName, false, true);
         public static SavedBool disableDummyTrain = new SavedBool("disableDummyTrain", settingsFileName, false, true);
         public static SavedBool disableDummyPlane = new SavedBool("disableDummyPlane", settingsFileName, false, true);
         public static SavedBool disableDummyShip = new SavedBool("disableDummyShip", settingsFileName, false, true);
 
-        public CargoHoldFix()
+        public OptimisedOutsideConnections()
         {
             try
             {
@@ -112,17 +112,17 @@ namespace CargoHoldFix
             group = helper.AddGroup("Delay Spawning");
             UIPanel panel = ((UIPanel)((UIHelper)group).self) as UIPanel;
             UILabel label = panel.AddUIComponent<UILabel>();
-            label.text = "How long to delay vehicles to wait for cargo before spawning, compared to the default \ndelay. Takes effect after a game restart. Recommended: 5x";
-            m_sliderPassengers = (UISlider)group.AddSlider($"Big Passenger Vehicles:", 1f, 10f, 1f, delayPassengers.value, ChangeSliderPassengers);
+            label.text = "How long to delay vehicles to wait for cargo before spawning compared to the default. \ndelay. Takes effect after a game restart. Recommended: 3x";
+            m_sliderPassengers = (UISlider)group.AddSlider($"Big Passenger Vehicles:", 1f, 5f, 1f, delayPassengers.value, ChangeSliderPassengers);
             m_sliderPassengers.width = 400f;
-            m_sliderPassengers.tooltip = delayTrain.value.ToString() + "x";
-            m_sliderTrain = (UISlider)group.AddSlider($"Cargo Trains:", 1f, 10f, 1f, delayTrain.value, ChangeSliderTrain);
+            m_sliderPassengers.tooltip = delayPassengers.value.ToString() + "x";
+            m_sliderTrain = (UISlider)group.AddSlider($"Cargo Trains:", 1f, 5f, 1f, delayTrain.value, ChangeSliderTrain);
             m_sliderTrain.width = 400f;
             m_sliderTrain.tooltip = delayTrain.value.ToString() + "x";
-            m_sliderPlane = (UISlider)group.AddSlider($"Cargo Planes:", 1f, 10f, 1f, delayPlane.value, ChangeSliderPlane);
+            m_sliderPlane = (UISlider)group.AddSlider($"Cargo Planes:", 1f, 5f, 1f, delayPlane.value, ChangeSliderPlane);
             m_sliderPlane.width = 400f;
             m_sliderPlane.tooltip = delayPlane.value.ToString() + "x";
-            m_sliderShip = (UISlider)group.AddSlider($"Cargo Ships:", 1f, 10f, 1f, delayShip.value, ChangeSliderShip);
+            m_sliderShip = (UISlider)group.AddSlider($"Cargo Ships:", 1f, 5f, 1f, delayShip.value, ChangeSliderShip);
             m_sliderShip.width = 400f;
             m_sliderShip.tooltip = delayShip.value.ToString() + "x";
             group.AddSpace(10);
@@ -130,7 +130,7 @@ namespace CargoHoldFix
             group = helper.AddGroup("Disable Dummy Traffic");
             panel = ((UIPanel)((UIHelper)group).self) as UIPanel;
             label = panel.AddUIComponent<UILabel>();
-            label.text = "Disable dummy vehicles that are just going from/to other cities (includes passenger \nvehicles). Takes effect after a game restart.";
+            label.text = "Disable dummy vehicles that are just going from/to other cities (includes small \nvehicles like cars). Takes effect after a game restart.";
             cb = (UICheckBox)group.AddCheckbox("Road Traffic", disableDummyRoads.value, (b) => { disableDummyRoads.value = b; });
             cb = (UICheckBox)group.AddCheckbox("Trains", disableDummyTrain.value, (b) => { disableDummyTrain.value = b; });
             cb = (UICheckBox)group.AddCheckbox("Planes", disableDummyPlane.value, (b) => { disableDummyPlane.value = b; });
