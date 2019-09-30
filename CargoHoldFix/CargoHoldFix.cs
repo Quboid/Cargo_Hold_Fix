@@ -14,16 +14,16 @@ namespace CargoHoldFix
         public string Description => "Large vehicles spawn less frequently with more cargo/passengers at a time. (Formerly called Cargo Hold Fix.)";
         public const string settingsFileName = "OptimisedOutsideConnections";
 
-        private static readonly string harmonyId = "quboid.csl_mods.cargo_hold_fix";
+        private static readonly string harmonyId = "quboid.csl_mods.optimisedoutsideconnections";
         private static HarmonyInstance harmonyInstance;
         private static readonly object padlock = new object();
 
         private static UISlider m_sliderPassengers, m_sliderTrain, m_sliderPlane, m_sliderShip;
 
-        public static SavedInt delayPassengers = new SavedInt("delayTrain", settingsFileName, 3, true);
-        public static SavedInt delayTrain = new SavedInt("delayTrain", settingsFileName, 3, true);
-        public static SavedInt delayPlane = new SavedInt("delayPlane", settingsFileName, 3, true);
-        public static SavedInt delayShip = new SavedInt("delayShip", settingsFileName, 3, true);
+        public static SavedInt delayPassengers = new SavedInt("delayPassengers", settingsFileName, 4, true);
+        public static SavedInt delayTrain = new SavedInt("delayTrain", settingsFileName, 4, true);
+        public static SavedInt delayPlane = new SavedInt("delayPlane", settingsFileName, 4, true);
+        public static SavedInt delayShip = new SavedInt("delayShip", settingsFileName, 4, true);
         public static SavedBool disableDummyRoads = new SavedBool("disableDummyRoads", settingsFileName, false, true);
         public static SavedBool disableDummyTrain = new SavedBool("disableDummyTrain", settingsFileName, false, true);
         public static SavedBool disableDummyPlane = new SavedBool("disableDummyPlane", settingsFileName, false, true);
@@ -52,7 +52,6 @@ namespace CargoHoldFix
             }
 
             HarmonyInstance harmony = GetHarmonyInstance();
-            HarmonyInstance.DEBUG = false;
             harmony.PatchAll(Assembly.GetExecutingAssembly());
 
             OutsideConnectionAI[] connections = Resources.FindObjectsOfTypeAll<OutsideConnectionAI>();
@@ -112,17 +111,17 @@ namespace CargoHoldFix
             group = helper.AddGroup("Delay Spawning");
             UIPanel panel = ((UIPanel)((UIHelper)group).self) as UIPanel;
             UILabel label = panel.AddUIComponent<UILabel>();
-            label.text = "How long to delay vehicles to wait for cargo before spawning compared to the default. \ndelay. Takes effect after a game restart. Recommended: 3x";
-            m_sliderPassengers = (UISlider)group.AddSlider($"Big Passenger Vehicles:", 1f, 5f, 1f, delayPassengers.value, ChangeSliderPassengers);
+            label.text = "How long to delay vehicles to wait for cargo before spawning compared to the default. \ndelay. Takes effect after a game restart. Recommended: 4x";
+            m_sliderPassengers = (UISlider)group.AddSlider($"Big Passenger Vehicles:", 1f, 10f, 1f, delayPassengers.value, ChangeSliderPassengers);
             m_sliderPassengers.width = 400f;
             m_sliderPassengers.tooltip = delayPassengers.value.ToString() + "x";
-            m_sliderTrain = (UISlider)group.AddSlider($"Cargo Trains:", 1f, 5f, 1f, delayTrain.value, ChangeSliderTrain);
+            m_sliderTrain = (UISlider)group.AddSlider($"Cargo Trains:", 1f, 10f, 1f, delayTrain.value, ChangeSliderTrain);
             m_sliderTrain.width = 400f;
             m_sliderTrain.tooltip = delayTrain.value.ToString() + "x";
-            m_sliderPlane = (UISlider)group.AddSlider($"Cargo Planes:", 1f, 5f, 1f, delayPlane.value, ChangeSliderPlane);
+            m_sliderPlane = (UISlider)group.AddSlider($"Cargo Planes:", 1f, 10f, 1f, delayPlane.value, ChangeSliderPlane);
             m_sliderPlane.width = 400f;
             m_sliderPlane.tooltip = delayPlane.value.ToString() + "x";
-            m_sliderShip = (UISlider)group.AddSlider($"Cargo Ships:", 1f, 5f, 1f, delayShip.value, ChangeSliderShip);
+            m_sliderShip = (UISlider)group.AddSlider($"Cargo Ships:", 1f, 10f, 1f, delayShip.value, ChangeSliderShip);
             m_sliderShip.width = 400f;
             m_sliderShip.tooltip = delayShip.value.ToString() + "x";
             group.AddSpace(10);

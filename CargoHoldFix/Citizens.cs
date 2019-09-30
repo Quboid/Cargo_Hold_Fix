@@ -1,11 +1,6 @@
-﻿using ColossalFramework;
-using ColossalFramework.UI;
-using Harmony;
-using ICities;
-using System;
+﻿using Harmony;
 using System.Collections.Generic;
 using System.Reflection.Emit;
-using System.Reflection;
 using UnityEngine;
 
 namespace CargoHoldFix
@@ -19,7 +14,7 @@ namespace CargoHoldFix
         {
             var codes = new List<CodeInstruction>(instructions);
             var newCodes = new List<CodeInstruction>();
-            CodeInstruction ci;
+            //CodeInstruction ci;
 
             string msg = $"ILCODE HumanAI (before)\nLines: {codes.Count}\n";
             //for (int i = 320; i < 360; i++)
@@ -45,7 +40,7 @@ namespace CargoHoldFix
                     return codes;
                 }
             }
-            Debug.Log($"CITIZENS ILCode FOUND - {lineNo}: {codes[lineNo].opcode} {codes[lineNo].operand}");
+            //Debug.Log($"CITIZENS ILCode FOUND - {lineNo}: {codes[lineNo].opcode} {codes[lineNo].operand}");
 
             // Add new lines
             newCodes.Add(new CodeInstruction(OpCodes.Ldarg_2));
@@ -57,13 +52,13 @@ namespace CargoHoldFix
                 newCodes.Add(codes[i]);
             }
 
-            msg = $"ILCODE HumanAI (after patching)\nLines: {newCodes.Count}\n";
-            for (int i = 330; i < 350; i++)
-            {
-                ci = newCodes[i];
-                msg += $"{i}: {ci.opcode}, {ci.operand ?? "null"} <{(ci.operand == null ? "null" : ci.operand.GetType().ToString())}>\n";
-            }
-            Debug.Log($"{msg}");
+            //msg = $"ILCODE HumanAI (after patching)\nLines: {newCodes.Count}\n";
+            //for (int i = 330; i < 350; i++)
+            //{
+            //    ci = newCodes[i];
+            //    msg += $"{i}: {ci.opcode}, {ci.operand ?? "null"} <{(ci.operand == null ? "null" : ci.operand.GetType().ToString())}>\n";
+            //}
+            //Debug.Log($"{msg}");
 
             return newCodes;
         }
